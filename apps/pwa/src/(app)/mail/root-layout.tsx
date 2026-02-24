@@ -23,12 +23,22 @@ export default function MailLayout({ children }: { children: React.ReactNode }) 
           __html: minify(/*js*/`{
             const fn = () => {
               const emailView = localStorage.getItem("email-view") ?? "column";
+              const rawTheme = localStorage.getItem("mail-theme") ?? "system";
+              const allowedThemes = new Set(["system", "midnight", "cotton-candy", "dusk", "forest", "sapphire"]);
+              const theme = allowedThemes.has(rawTheme) ? rawTheme : "system";
+
               const rootLayout = document.getElementById("app:root-layout");
               if (emailView === "column") {
                 rootLayout?.classList.add("emailscolumn");
               } else {
                 rootLayout?.classList.remove("emailscolumn");
               };
+
+              if (theme === "system") {
+                document.documentElement.removeAttribute("data-theme");
+              } else {
+                document.documentElement.setAttribute("data-theme", theme);
+              }
             };
             fn();
 
