@@ -1,10 +1,11 @@
 import { db } from "@/utils/data/db";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import RootLayout from "../layout";
 import Header from "./root-layout-header";
 import Sidebar from "./root-layout-sidebar";
+import { ClientPinGate } from "./client-pin-gate";
 import { minify } from "@/utils/minify.macro" with { type: "macro" };
 
 export default function MailLayout({ children }: { children: React.ReactNode }) {
@@ -18,9 +19,10 @@ export default function MailLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <RootLayout>
-      <div className="//min-h-screen //bg-sidebar h-screen overflow-hidden emailscolumn" vaul-drawer-wrapper="" id="app:root-layout">
-        <script dangerouslySetInnerHTML={{
-          __html: minify(/*js*/`{
+      <ClientPinGate>
+        <div className="//min-h-screen //bg-sidebar h-screen overflow-hidden emailscolumn" vaul-drawer-wrapper="" id="app:root-layout">
+          <script dangerouslySetInnerHTML={{
+            __html: minify(/*js*/`{
             const fn = () => {
               const emailView = localStorage.getItem("email-view") ?? "column";
               const rawTheme = localStorage.getItem("mail-theme") ?? "system";
@@ -51,26 +53,27 @@ export default function MailLayout({ children }: { children: React.ReactNode }) 
             /*   window.removeEventListener("load", fn);*/
             /*   window.removeEventListener("DOMContentLoaded", fn);*/
             /* }*/
-          }`)
-        }} />
-        <style dangerouslySetInnerHTML={{
-          __html: /*css*/`
+            }`)
+          }} />
+          <style dangerouslySetInnerHTML={{
+            __html: /*css*/`
       body {
         background-color: var(--sidebar) !important;
       }
       `    .replaceAll(/(\s{2,}|\n+)/gm, "")
-        }} />
-        <Header />
-        <div className="flex h-[calc(100vh-4.1rem)] w-screen max-w-full bg-transparent">
-          <Sidebar className="hidden min-h-[calc(100vh-4.1rem)] sm:flex pt-0 sm:pt-0" />
-          <div
-            className="h-[calc(100vh-4.1rem)] w-screen max-w-full overflow-y-auto sm:rounded-tl-lg @container"
-            id="mail-layout-content"
-          >
-            {children}
+          }} />
+          <Header />
+          <div className="flex h-[calc(100vh-4.1rem)] w-screen max-w-full bg-transparent">
+            <Sidebar className="hidden min-h-[calc(100vh-4.1rem)] sm:flex pt-0 sm:pt-0" />
+            <div
+              className="h-[calc(100vh-4.1rem)] w-screen max-w-full overflow-y-auto sm:rounded-tl-lg @container"
+              id="mail-layout-content"
+            >
+              {children}
+            </div>
           </div>
         </div>
-      </div>
+      </ClientPinGate>
       <Suspense>
         <RedirectToLoginOnLogout />
         <RedirectTilde />
