@@ -14,6 +14,7 @@ services:
        NEXT_PUBLIC_NOTIFICATIONS_PUBLIC_KEY: ${NEXT_PUBLIC_NOTIFICATIONS_PUBLIC_KEY}
        WEB_NOTIFICATIONS_PRIVATE_KEY: ${WEB_NOTIFICATIONS_PRIVATE_KEY}
        EMAIL_AUTH_TOKEN: ${EMAIL_AUTH_TOKEN}
+       EMAIL_SEND_URL: ${EMAIL_SEND_URL} # ask me on discord for the current code if you want it - or you can make it from scratch as its simple
        EMAIL_DKIM_PRIVATE_KEY: ${EMAIL_DKIM_PRIVATE_KEY}
        S3_KEY_ID: ${S3_KEY_ID}
        S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
@@ -22,11 +23,13 @@ services:
        # optional ones
        EMAILTHING_ME_TOKEN: ${EMAILTHING_ME_TOKEN}
        SECRET_SPECIAL_TOKEN_YAY: ${SECRET_SPECIAL_TOKEN_YAY}
+       EMAIL_SEND_URL_IMPORTANT: ${EMAIL_SEND_URL_IMPORTANT}
        S3_BUCKET: ${S3_BUCKET:-email}
        RPID: ${RPID}
        RPID_ORIGIN: ${RPID_ORIGIN}
        NODE_ENV: production
        PORT: 3000
+       REPLICA_ID: '{{.Task.Slot}}' 
      ports:
        - "3000:3000"
      healthcheck:
@@ -63,6 +66,7 @@ services:
      environment:
        NODE_ENV: production
        PORT: 3000
+       REPLICA_ID: '{{.Task.Slot}}' 
      ports:
        - "3010:3000"
      healthcheck:
